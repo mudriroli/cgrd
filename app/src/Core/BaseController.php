@@ -2,6 +2,7 @@
 
 namespace App\Core;
 
+use App\Service\SessionService;
 use Twig\Environment;
 use Twig\Extension\DebugExtension;
 use Twig\Loader\FilesystemLoader;
@@ -25,7 +26,7 @@ abstract class BaseController
         $baseUrl = BASE_URL;
         $url = $baseUrl . "/$controllerName/$action";
         if (!empty($args)) {
-            $_SESSION['redirect_message'] = $args;
+            SessionService::setVariable('redirect_message', $args);
         }
 
         header("Location: $url", true,  302);

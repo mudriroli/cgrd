@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Core\BaseController;
 use App\Model\Article;
 use App\Service\ArticleService;
+use App\Service\SessionService;
 use App\Service\ValidatorService;
 use Doctrine\ORM\EntityManager;
 
@@ -17,13 +18,12 @@ class ArticleController extends BaseController
     public function index($params)
     {
         $message = [];
-        if (isset($_SESSION['redirect_message'])){
-            $message = $_SESSION['redirect_message'];
-            unset($_SESSION['redirect_message']);
+        if (SessionService::getVariable('redirect_message')){
+            $message = SessionService::getVariable('redirect_message');
+            SessionService::unsetVariable('redirect_message');
             return $this->render('/article/articles.html.twig', ['articles' => $this->articleService->getArticles(), key($message) => $message[key($message)]]);
-
         }
-        if (isset($_SESSION['user_id'])) {
+        if (SessionService::getVariable('user_id') !== null) {
             return $this->render('/article/articles.html.twig', ['articles' => $this->articleService->getArticles()]);
         } else {
             return $this->redirect('login', 'index');

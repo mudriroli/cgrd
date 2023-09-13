@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Core\BaseController;
 use App\Model\User;
+use App\Service\SessionService;
 use App\Service\UserService;
 
 class LoginController extends BaseController
@@ -14,14 +15,14 @@ class LoginController extends BaseController
 
     public function index()
     {
-        if (isset($_SESSION['user_id'])) {
+        if (SessionService::getVariable('user_id')) {
             return $this->redirect('article', 'index');
         }
 
         $message = [];
-        if (isset($_SESSION['redirect_message'])){
-            $message = $_SESSION['redirect_message'];
-            unset($_SESSION['redirect_message']);
+        if (SessionService::getVariable('redirect_message')){
+            $message = SessionService::getVariable('redirect_message');
+            SessionService::unsetVariable('redirect_message');
         }
         return $this->render('/login/login.html.twig', $message);
     }
@@ -32,7 +33,7 @@ class LoginController extends BaseController
         if ($user = $this->userService->getUserByUsername($username)) {
             if ($this->validatePassword($user, $params['password'])) {
                 session_regenerate_id();
-                $_SESSION['user_id'] = $user->getId();
+                SessionService::setVariable('user_id', $user->getId());
 
                 return $this->redirect('article', 'index');
             } else {
