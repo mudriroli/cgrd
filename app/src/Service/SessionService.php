@@ -15,7 +15,7 @@ class SessionService
 
     public static function setVariable($key, $value): void
     {
-        $_SESSION = [$key => $value];
+        $_SESSION[$key] = $value;
     }
 
     public static function unsetVariable(string $key): void

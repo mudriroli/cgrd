@@ -37,8 +37,12 @@ class App
     private function getControllerName(): string
     {
         $urlPath = $this->getExplodedUrlPath();
-
-        return $urlPath[0] . "Controller";
+        $controllerName = $urlPath[0];
+        if (empty($controllerName)) {
+            return $controllerName;
+        } else {
+            return $urlPath[0] . "Controller";
+        }
     }
 
     private function getControllerActionName(): string

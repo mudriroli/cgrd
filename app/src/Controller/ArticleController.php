@@ -5,13 +5,17 @@ namespace App\Controller;
 use App\Core\BaseController;
 use App\Model\Article;
 use App\Service\ArticleService;
+use App\Service\LoggerService;
 use App\Service\SessionService;
 use App\Service\ValidatorService;
 use Doctrine\ORM\EntityManager;
 
 class ArticleController extends BaseController
 {
-    public function __construct(private ArticleService $articleService, private EntityManager $em)
+    public function __construct(
+        private ArticleService $articleService,
+        private EntityManager $em,
+        private LoggerService $logger)
     {
     }
 
@@ -23,7 +27,7 @@ class ArticleController extends BaseController
             SessionService::unsetVariable('redirect_message');
             return $this->render('/article/articles.html.twig', ['articles' => $this->articleService->getArticles(), key($message) => $message[key($message)]]);
         }
-        if (SessionService::getVariable('user_id') !== null) {
+        if (SessionService::getVariable('user_id')) {
             return $this->render('/article/articles.html.twig', ['articles' => $this->articleService->getArticles()]);
         } else {
             return $this->redirect('login', 'index');
@@ -52,9 +56,9 @@ class ArticleController extends BaseController
             $this->em->persist($article);
             $this->em->flush();
         } catch (\Exception $e) {
-            return $this->redirect('article', 'index', ['exception_message' => $e->getMessage()]);
+            $this->logger->log($e->getMessage());
+            return $this->redirect('article', 'index', ['exception_message' => 'Failed to create News!']);
         }
-
 
         return $this->redirect('article', 'index', ['article_created_success' => 'News Successfully Created!']);
     }
@@ -74,7 +78,8 @@ class ArticleController extends BaseController
             $this->em->persist($article);
             $this->em->flush();
         } catch (\Exception $e) {
-            return $this->redirect('article', 'index', ['exception_message' => $e->getMessage()]);
+            $this->logger->log($e->getMessage());
+            return $this->redirect('article', 'index', ['exception_message' => 'Failed to change News']);
         }
 
         return $this->redirect('article', 'index', ['article_changed_success' => 'News Was Successfully Changed!']);
@@ -87,7 +92,8 @@ class ArticleController extends BaseController
             $this->em->remove($article);
             $this->em->flush();
         } catch (\Exception $e) {
-            return $this->redirect('article', 'index', ['exception_message' => $e->getMessage()]);
+            $this->logger->log($e->getMessage());
+            return $this->redirect('article', 'index', ['exception_message' => 'Failed to delete!']);
         }
 
         return $this->redirect('article', 'index', ['article_deleted_success' => 'News Was Deleted!']);
