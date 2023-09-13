@@ -7,8 +7,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: cgrd
       MYSQL_DATABASE: cgrd
-      MYSQL_USER: test
-      MYSQL_PASSWORD: cgrdroot
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: test
     ports:
       - '3306:3306'
 

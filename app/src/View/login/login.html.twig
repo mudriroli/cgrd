@@ -1,0 +1,18 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <div class="container">
+        <img class="company-logo" src="{{ assets_path }}/images/logo.svg">
+        <div class="center-size-sm">
+            {% if login_error_message is defined %}
+                {% include 'alerts/login_error.html.twig' %}
+            {% endif %}
+            <form action="/login/validate" method="post" class="login-form">
+                <input class="form-field" type="text" name="username" id="username" placeholder="Username" required />
+                <input class="form-field" type="password" name="password" id="password" placeholder="Password" required />
+
+                <input class="form-submit-button" type="submit" value="Login" />
+            </form>
+        </div>
+    </div>
+{% endblock %}

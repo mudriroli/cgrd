@@ -9,6 +9,8 @@
     "twig/twig": "^3.0",
     "symfony/dotenv": "^6.3",
     "doctrine/orm": "2.16.2",
-    "symfony/cache": "^6.3"
+    "symfony/cache": "^6.3",
+    "php-di/php-di": "^7.0",
+    "ext-http": "*"
   }
 }

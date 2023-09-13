@@ -1,0 +1,50 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <div class="container">
+        <img class="company-logo" src="{{ assets_path }}/images/logo.svg">
+        <div class="center-size-sm">
+            {% if article_created_success is defined %}
+                {% include 'alerts/article_created_success.html.twig' %}
+            {% elseif article_changed_success is defined %}
+                {% include 'alerts/article_changed_success.html.twig' %}
+            {% elseif article_deleted_success is defined %}
+                {% include 'alerts/article_deleted_success.html.twig' %}
+            {% endif %}
+
+            <div class="article-section">
+                <p class="section-title">All News</p>
+                {% for article in articles %}
+                    <div class="article-field" data-article-id="{{ article.id }}">
+                        <div class="article-title">{{ article.title }}</div>
+                        <div class="article-description">{{ article.description }}</div>
+                        <div style="clear: both;"></div>
+                        <object data="{{ assets_path }}/images/close.svg" class="form-field-icon-delete"></object>
+                        <object data="{{ assets_path }}/images/pencil.svg" class="form-field-icon-edit"></object>
+                    </div>
+                {% endfor %}
+                <form id="delete-article" method="post" action="/article/delete" hidden>
+                    <input name="articleId" value=""/>
+                </form>
+            </div>
+
+            <div class="article-section">
+                <div class="section-title-wrapper">
+                    <p class="section-title" id="create-section-title">Create News</p>
+                    <object id="cancel-edit-icon" data="{{ assets_path }}/images/close.svg" class="cancel-edit-icon" hidden></object>
+                </div>
+                <form id="create-edit-form" method="post" action="/article/create">
+                    <input id="create-title-field" class="form-field" type="text" name="title" placeholder="Title" required />
+                    <textarea id="create-description-field" class="form-field" rows="10" type="text" name="description" id="article-description" placeholder="Description" required /></textarea>
+                    <input id="article-edit-id" name="articleId" value="" hidden />
+                    <input id="create-submit-button" class="form-submit-button" type="submit" value="Create" />
+                </form>
+            </div>
+
+            <form method="get" action="/login/logout">
+                <input class="form-submit-button" type="submit" value="Logout" />
+            </form>
+
+        </div>
+    </div>
+{% endblock %}
