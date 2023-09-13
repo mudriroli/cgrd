@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Core\BaseController;
 use App\Model\Article;
 use App\Service\ArticleService;
+use App\Service\ValidatorService;
 use Doctrine\ORM\EntityManager;
 
 class ArticleController extends BaseController
@@ -29,7 +30,7 @@ class ArticleController extends BaseController
         }
     }
 
-    public function article($params)
+    public function article(array $params)
     {
         $articleId = $params['articleId'];
         $article = $this->articleService->getArticleByIdAsArray($articleId);
@@ -37,8 +38,12 @@ class ArticleController extends BaseController
         echo json_encode($article);
     }
 
-    public function create($params)
+    public function create(array $params)
     {
+        $validator = ValidatorService::validateLength($params['title'], 1, 20);
+        if (!$validator['is_valid']) {
+            return $this->redirect('article', 'index', ['validator_error' => $validator['message']]);
+        }
         $article = new Article();
         $article->setTitle($params['title']);
         $article->setDescription($params['description']);
@@ -51,6 +56,11 @@ class ArticleController extends BaseController
 
     public function edit($params)
     {
+        $validator = ValidatorService::validateLength($params['title'], 1, 20);
+        if (!$validator['is_valid']) {
+            return $this->redirect('article', 'index', ['validator_error' => $validator['message']]);
+        }
+
         $article = $this->articleService->getArticleById($params['articleId']);
         $article->setTitle($params['title']);
         $article->setDescription($params['description']);

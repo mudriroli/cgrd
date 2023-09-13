@@ -133,17 +133,19 @@ body, html {
 
 .article-title {
     float: left;
-    max-width: 10%;
+    max-width: 20%;
     margin-left: 20px;
     font-weight: bold;
     color: #16396b;
+    word-wrap: break-word;
 }
 
 .article-description {
     float: left;
-    max-width: 40%;
+    max-width: 60%;
     margin-left: 20px;
     color: #16396b;
+    word-wrap: break-word;
 }
 
 .section-title-wrapper {

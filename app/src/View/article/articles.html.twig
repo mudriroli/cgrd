@@ -10,28 +10,32 @@
                 {% include 'alerts/article_changed_success.html.twig' %}
             {% elseif article_deleted_success is defined %}
                 {% include 'alerts/article_deleted_success.html.twig' %}
+            {% elseif validator_error is defined %}
+                {% include 'alerts/validator_alert.html.twig' %}
             {% endif %}
 
-            <div class="article-section">
-                <p class="section-title">All News</p>
-                {% for article in articles %}
-                    <div class="article-field" data-article-id="{{ article.id }}">
-                        <div class="article-title">{{ article.title }}</div>
-                        <div class="article-description">{{ article.description }}</div>
-                        <div style="clear: both;"></div>
-                        <object data="{{ assets_path }}/images/close.svg" class="form-field-icon-delete"></object>
-                        <object data="{{ assets_path }}/images/pencil.svg" class="form-field-icon-edit"></object>
-                    </div>
-                {% endfor %}
-                <form id="delete-article" method="post" action="/article/delete" hidden>
-                    <input name="articleId" value=""/>
-                </form>
-            </div>
+            {% if articles is not empty %}
+                <div class="article-section">
+                    <p class="section-title">All News</p>
+                    {% for article in articles %}
+                        <div class="article-field" data-article-id="{{ article.id }}">
+                            <div class="article-title">{{ article.title }}</div>
+                            <div class="article-description">{{ article.description }}</div>
+                            <div style="clear: both;"></div>
+                            <img src="{{ assets_path }}/images/close.svg" class="form-field-icon-delete"></img>
+                            <img src="{{ assets_path }}/images/pencil.svg" class="form-field-icon-edit"></img>
+                        </div>
+                    {% endfor %}
+                    <form id="delete-article" method="post" action="/article/delete" hidden>
+                        <input name="articleId" value=""/>
+                    </form>
+                </div>
+            {% endif %}
 
             <div class="article-section">
                 <div class="section-title-wrapper">
                     <p class="section-title" id="create-section-title">Create News</p>
-                    <object id="cancel-edit-icon" data="{{ assets_path }}/images/close.svg" class="cancel-edit-icon" hidden></object>
+                    <img id="cancel-edit-icon" src="{{ assets_path }}/images/close.svg" class="cancel-edit-icon" hidden></img>
                 </div>
                 <form id="create-edit-form" method="post" action="/article/create">
                     <input id="create-title-field" class="form-field" type="text" name="title" placeholder="Title" required />
