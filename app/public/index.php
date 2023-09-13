@@ -15,12 +15,15 @@ session_set_cookie_params(['secure' => true, 'httponly' => true, 'samesite' => '
 session_start();
 
 const ASSETS_PATH = '/assets/';
+const BOOTSTRAP_PATH = __DIR__ . '/../src/bootstrap.php';
+const ENV_PATH = __DIR__ . '/../.env';
+const CONFIG_PATH = __DIR__ . '/../config/config.php';
 define("BASE_URL", ($_SERVER['REQUEST_SCHEME'] ?? 'http') . '://' . $_SERVER['HTTP_HOST']);
 
-$container = require __DIR__ . '/../src/bootstrap.php';
+$container = require BOOTSTRAP_PATH;
 
 $dotEnv = new Dotenv();
-$dotEnv->load(__DIR__ . '/../.env');
+$dotEnv->load(ENV_PATH);
 
 $app = new App($container);
 $app->loadControllerAction();

@@ -2,53 +2,28 @@
 
 namespace App\Service;
 
+use App\Repository\ArticleRepository;
 use Doctrine\ORM\AbstractQuery;
-use Doctrine\ORM\EntityManager;
 
 class ArticleService
 {
-    public function __construct(private EntityManager $em)
+    public function __construct(private ArticleRepository $repository)
     {
     }
 
     public function getArticles()
     {
-        $queryBuilder = $this->em->createQueryBuilder();
-        $articles = $queryBuilder
-            ->select('a')
-            ->from('App\Model\Article', 'a')
-            ->getQuery()
-            ->execute();
-
-        return $articles;
+        return $this->repository->getArticles();
     }
 
     public function getArticleById(int $id)
     {
-        $queryBuilder = $this->em->createQueryBuilder();
-        $article = $queryBuilder
-            ->select('a')
-            ->from('App\Model\Article', 'a')
-            ->where('a.id = :id')
-            ->setParameter('id', $id)
-            ->getQuery()
-            ->getOneOrNullResult();
-
-        return $article;
+        return $this->repository->getArticleById($id);
     }
 
     public function getArticleByIdAsArray(int $id)
     {
-        $queryBuilder = $this->em->createQueryBuilder();
-        $article = $queryBuilder
-            ->select('a')
-            ->from('App\Model\Article', 'a')
-            ->where('a.id = :id')
-            ->setParameter('id', $id)
-            ->getQuery()
-            ->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
-
-        return $article;
+        return $this->repository->getArticleByIdAsArray($id);
     }
 
 

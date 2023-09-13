@@ -15,7 +15,7 @@ use Doctrine\ORM\QueryBuilder;
 use function DI\create;
 
 $containerBuilder = new ContainerBuilder();
-$containerBuilder->addDefinitions(__DIR__ . '/../config/config.php');
+$containerBuilder->addDefinitions(CONFIG_PATH);
 $container = $containerBuilder->build();
 
 return $container;
