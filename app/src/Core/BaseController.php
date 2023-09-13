@@ -9,7 +9,7 @@ use Twig\Loader\FilesystemLoader;
 
 abstract class BaseController
 {
-    protected function render($templatePath, $args = []): void
+    protected function render(string $templatePath, array $args = []): void
     {
         $args['assets_path'] = ASSETS_PATH;
         $loader = new FilesystemLoader('../src/View');

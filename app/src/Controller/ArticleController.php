@@ -48,13 +48,18 @@ class ArticleController extends BaseController
         $article->setTitle($params['title']);
         $article->setDescription($params['description']);
 
-        $this->em->persist($article);
-        $this->em->flush();
+        try {
+            $this->em->persist($article);
+            $this->em->flush();
+        } catch (\Exception $e) {
+            return $this->redirect('article', 'index', ['exception_message' => $e->getMessage()]);
+        }
+
 
         return $this->redirect('article', 'index', ['article_created_success' => 'News Successfully Created!']);
     }
 
-    public function edit($params)
+    public function edit(array $params)
     {
         $validator = ValidatorService::validateLength($params['title'], 1, 20);
         if (!$validator['is_valid']) {
@@ -65,17 +70,25 @@ class ArticleController extends BaseController
         $article->setTitle($params['title']);
         $article->setDescription($params['description']);
 
-        $this->em->persist($article);
-        $this->em->flush();
+        try {
+            $this->em->persist($article);
+            $this->em->flush();
+        } catch (\Exception $e) {
+            return $this->redirect('article', 'index', ['exception_message' => $e->getMessage()]);
+        }
 
         return $this->redirect('article', 'index', ['article_changed_success' => 'News Was Successfully Changed!']);
     }
 
-    public function delete($params)
+    public function delete(array $params)
     {
         $article = $this->articleService->getArticleById($params['articleId']);
-        $this->em->remove($article);
-        $this->em->flush();
+        try {
+            $this->em->remove($article);
+            $this->em->flush();
+        } catch (\Exception $e) {
+            return $this->redirect('article', 'index', ['exception_message' => $e->getMessage()]);
+        }
 
         return $this->redirect('article', 'index', ['article_deleted_success' => 'News Was Deleted!']);
     }

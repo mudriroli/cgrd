@@ -27,7 +27,7 @@ class LoginController extends BaseController
         return $this->render('/login/login.html.twig', $message);
     }
 
-    public function validate($params)
+    public function validate(array $params)
     {
         $username = $params['username'];
         if ($user = $this->userService->getUserByUsername($username)) {

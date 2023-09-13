@@ -12,6 +12,8 @@
                 {% include 'alerts/article_deleted_success.html.twig' %}
             {% elseif validator_error is defined %}
                 {% include 'alerts/validator_alert.html.twig' %}
+            {% elseif exception_message is defined %}
+                {% include 'alerts/exception_message.html.twig' %}
             {% endif %}
 
             {% if articles is not empty %}
@@ -39,7 +41,7 @@
                 </div>
                 <form id="create-edit-form" method="post" action="/article/create">
                     <input id="create-title-field" class="form-field" type="text" name="title" placeholder="Title" required />
-                    <textarea id="create-description-field" class="form-field" rows="10" type="text" name="description" id="article-description" placeholder="Description" required /></textarea>
+                    <textarea id="create-description-field" class="form-field" rows="10" type="text" name="description" placeholder="Description" required /></textarea>
                     <input id="article-edit-id" name="articleId" value="" hidden />
                     <input id="create-submit-button" class="form-submit-button" type="submit" value="Create" />
                 </form>
