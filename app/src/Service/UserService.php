@@ -5,7 +5,7 @@ namespace App\Service;
 use App\Model\User;
 use Doctrine\ORM\EntityManager;
 
-class GetUserService
+class UserService
 {
     public function __construct(private EntityManager $em)
     {

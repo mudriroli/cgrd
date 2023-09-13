@@ -4,11 +4,11 @@ namespace App\Controller;
 
 use App\Core\BaseController;
 use App\Model\User;
-use App\Service\GetUserService;
+use App\Service\UserService;
 
-class Login extends BaseController
+class LoginController extends BaseController
 {
-    public function __construct(private GetUserService $userService)
+    public function __construct(private UserService $userService)
     {
     }
 

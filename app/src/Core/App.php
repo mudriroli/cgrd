@@ -1,8 +1,7 @@
 <?php
 namespace App\Core;
 
-use App\Controller\Article;
-use App\Service\ArticleService;
+use App\Controller\ArticleController;
 use DI\Container;
 
 class App
@@ -12,7 +11,7 @@ class App
 
     public function __construct(private Container $container)
     {
-        $this->controller = $this->container->get(Article::class);
+        $this->controller = $this->container->get(ArticleController::class);
         $this->action = 'index';
     }
 
@@ -39,7 +38,7 @@ class App
     {
         $urlPath = $this->getExplodedUrlPath();
 
-        return $urlPath[0];
+        return $urlPath[0] . "Controller";
     }
 
     private function getControllerActionName(): string
@@ -58,19 +57,26 @@ class App
             $controllerName = '\\App\\Controller\\'.$controllerName;
             $this->controller = $this->container->get($controllerName);
         } elseif (empty($controllerName)) {
-            $this->controller = $this->container->get(Article::class);
+            $this->controller = $this->container->get(ArticleController::class);
         } else {
-            $this->controller = new \App\Controller\_404();
+            $this->controller = new \App\Controller\_404Controller();
         }
     }
 
     //TODO: sanitize query
     private function sanitizeQuery(): array
     {
+        $sanitized = [];
         if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             return $_GET;
         } else {
-            return $_POST;
+            foreach ($_POST as $key => $input) {
+                $input = trim($input);
+                $input = htmlspecialchars($input);
+                $input = filter_var($input);
+                $sanitized[$key] = $input;
+            }
+            return $sanitized;
         }
     }
 
@@ -81,7 +87,7 @@ class App
         if (method_exists($this->controller, $this->getControllerActionName())) {
             $this->action = $this->getControllerActionName();
         } else {
-            $this->controller = new \App\Controller\_404();
+            $this->controller = new \App\Controller\_404Controller();
         }
         $this->container->call([$this->controller, $this->action], [$sanitizedQuery]);
     }

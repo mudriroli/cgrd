@@ -3,10 +3,11 @@
 namespace App\Controller;
 
 use App\Core\BaseController;
+use App\Model\Article;
 use App\Service\ArticleService;
 use Doctrine\ORM\EntityManager;
 
-class Article extends BaseController
+class ArticleController extends BaseController
 {
     public function __construct(private ArticleService $articleService, private EntityManager $em)
     {
@@ -38,7 +39,7 @@ class Article extends BaseController
 
     public function create($params)
     {
-        $article = new \App\Model\Article();
+        $article = new Article();
         $article->setTitle($params['title']);
         $article->setDescription($params['description']);
 
